@@ -1,8 +1,9 @@
 from .settings import settings
 # from ..models.user import User
-import databases,sqlalchemy
+import databases
+import sqlalchemy
 # from motor.motor_asyncio import AsyncIOMotorClient
-from models.books import Book
+from ..models.books import Book
 # from beanie import init_beanie
 
 
@@ -38,6 +39,9 @@ review = sqlalchemy.Table(
     sqlalchemy.Column("id", sqlalchemy.Integer, primary_key=True, index=True),
     sqlalchemy.Column("comment", sqlalchemy.String),
     sqlalchemy.Column("rating", sqlalchemy.Integer),
+    sqlalchemy.Column("book_id", sqlalchemy.Integer,
+                      sqlalchemy.ForeignKey("books.id")),
+
 )
 metadata.drop_all(bind=engine)
 metadata.create_all(bind=engine)
