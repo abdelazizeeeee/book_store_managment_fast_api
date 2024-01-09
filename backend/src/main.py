@@ -2,37 +2,37 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import Depends, HTTPException, status
 from config.database import books,database
-from src.config.settings import settings
-from src.config.database import startDB
+# from src.config.settings import settings
+# from src.config.database import startDB
 
-from src.routes import auth, user
+# from src.routes import auth, user
 from models.books import Book
 
 
 
 app = FastAPI()
 
-origins = [
-    settings.CLIENT_ORIGIN,
-]
+# origins = [
+#     settings.CLIENT_ORIGIN,
+# ]
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-
-@app.on_event("startup")
-async def start_dependencies():
-    await startDB()
-    # await startMinio()
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=origins,
+#     allow_credentials=True,
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
 
 
-app.include_router(auth.router, tags=['Auth'], prefix='/api/auth')
-app.include_router(user.router, tags=['Users'], prefix='/api/users')
+# @app.on_event("startup")
+# async def start_dependencies():
+#     await startDB()
+#     # await startMinio()
+
+
+# app.include_router(auth.router, tags=['Auth'], prefix='/api/auth')
+# app.include_router(user.router, tags=['Users'], prefix='/api/users')
 
 
 @app.get("/api/healthchecker")
@@ -42,7 +42,13 @@ def root():
 
 # Endpoint to get book details
 @app.get("/api/books/{book_id}")
-async def Book_details(book:Book):
+async def get_book_details(book_id: int):
+    query = books.select().where(books.c.id == book_id)
+    book = await database.fetch_one(query)
+
+    if book is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Book not found")
+
     return book
 
 
