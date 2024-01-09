@@ -2,30 +2,25 @@ from datetime import datetime
 from pydantic import BaseModel
 from typing import Optional
 from beanie import Document
-from src import utils
+from ...src import utils
 
-class Register(BaseModel):
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
+class TokenData(BaseModel):
+    username: str or None = None
+
+
+class Users(BaseModel):
     username: str
-    email: str
-    password: str
+    email: str or None = None
+    full_name: str or None = None
+    hashed_password: str
+    disabled: bool or None = None
 
 
-class Login(BaseModel):
-    username: str
-    password: str
-
-
-class UserResponse(BaseModel):
-    username: str
-    email: str
-    pic_url: str
-
-# This is the model that will be saved to the database
-
-
-class User(Document):
-    username: str
-    email: str
-    password: str
-    created_at: Optional[datetime] = None
-    pic_url: Optional[str] = None
+class UserInDB(Users):
+    hashed_password: str

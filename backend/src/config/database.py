@@ -1,9 +1,18 @@
 from .settings import settings
+
 # from ..models.user import User
+<<<<<<< Updated upstream
 import databases
 import sqlalchemy
 # from motor.motor_asyncio import AsyncIOMotorClient
 from ..models.books import Book
+=======
+import databases, sqlalchemy
+
+# from motor.motor_asyncio import AsyncIOMotorClient
+from ..models.books import Book
+
+>>>>>>> Stashed changes
 # from beanie import init_beanie
 
 
@@ -43,5 +52,18 @@ review = sqlalchemy.Table(
                       sqlalchemy.ForeignKey("books.id")),
 
 )
+
+
+User = sqlalchemy.Table(
+    "users",
+    metadata,
+    sqlalchemy.Column("id", sqlalchemy.Integer, primary_key=True, index=True),
+    sqlalchemy.Column("username", sqlalchemy.String, index=True),
+    sqlalchemy.Column("email", sqlalchemy.String, index=True),
+    sqlalchemy.Column("full_name", sqlalchemy.String, index=True),
+    sqlalchemy.Column("hashed_password", sqlalchemy.String),
+    sqlalchemy.Column("disabled", sqlalchemy.Boolean, default=False),
+)
+
 metadata.drop_all(bind=engine)
 metadata.create_all(bind=engine)
