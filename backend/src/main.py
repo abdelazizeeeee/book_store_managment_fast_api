@@ -62,7 +62,6 @@ async def Delete_book(book:Book):
 async def create_new_book(book: Book):
     query = books.insert().values(book.dict())
 
-    # Execute the query
     last_record_id = await database.execute(query)
 
     return {"message": "Book created successfully", "book_id": last_record_id}
